@@ -1,0 +1,11 @@
+{
+  "name": "backlisto",
+  "version": "1.0.0",
+  "description": "This is a easy backend for posting a made in flutter",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "JoseKabo",
+  "license": "ISC"
+}
