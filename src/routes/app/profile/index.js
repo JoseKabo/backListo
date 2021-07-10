@@ -78,7 +78,7 @@ router.post('/changePass', async(request, response) => {
     connection.end();
 });
 
-router.get('/myposts', async(request, response) => {
+router.post('/myposts', async(request, response) => {
     connection = getConnection();
     connection.connect(error => {
         if (error) {
@@ -90,6 +90,72 @@ router.get('/myposts', async(request, response) => {
         id
     } = request.body;
     const sql = ` CALL SP_getOnlyMyPostings(?) `;
+    const values = [
+        id
+    ];
+    connection.query(sql, values, (error, result) => {
+        if (error) response.status(200).json({ error: true, status: 500, message: error.message });
+        if (result.length > 0) {
+            response.status(200).json({
+                error: false,
+                status: 200,
+                message: {
+                    response: result[0],
+                    message: "Success"
+                }
+            });
+        } else {
+            response.status(200).json({ error: true, status: 500, message: 'No result' });
+        }
+    });
+    connection.end();
+});
+
+router.post('/mybasicinfo', async(request, response) => {
+    connection = getConnection();
+    connection.connect(error => {
+        if (error) {
+            console.log(error);
+            response.status(200).json({ error: true, status: 500, message: "ERROR_SERVER" });
+        }
+    });
+    const {
+        id
+    } = request.body;
+    const sql = ` CALL SP_getBasicInfo(?) `;
+    const values = [
+        id
+    ];
+    connection.query(sql, values, (error, result) => {
+        if (error) response.status(200).json({ error: true, status: 500, message: error.message });
+        if (result.length > 0) {
+            response.status(200).json({
+                error: false,
+                status: 200,
+                message: {
+                    response: result[0],
+                    message: "Success"
+                }
+            });
+        } else {
+            response.status(200).json({ error: true, status: 500, message: 'No result' });
+        }
+    });
+    connection.end();
+});
+
+router.post('/mystadistics', async(request, response) => {
+    connection = getConnection();
+    connection.connect(error => {
+        if (error) {
+            console.log(error);
+            response.status(200).json({ error: true, status: 500, message: "ERROR_SERVER" });
+        }
+    });
+    const {
+        id
+    } = request.body;
+    const sql = ` CALL 	SP_getStadistics(?) `;
     const values = [
         id
     ];
