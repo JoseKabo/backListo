@@ -5,7 +5,7 @@ const uuid = require('uuid');
 const router = express.Router();
 const colors = require('colors');
 
-router.post('/getAllPosts', async(request, response) => {
+router.get('/getAllPosts', async(request, response) => {
     connection = getConnection();
     connection.connect(error => {
         if (error) {
@@ -16,7 +16,7 @@ router.post('/getAllPosts', async(request, response) => {
     const sql = ` CALL 	SP_getAllPosting() `;
     connection.query(sql, (error, result) => {
         if (error) response.status(200).json({ error: true, status: 500, message: error.message });
-        if (result.affectedRows > 0) {
+        if (result.length > 0) {
             response.status(200).json({
                 error: false,
                 status: 200,
