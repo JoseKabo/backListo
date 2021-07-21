@@ -5,7 +5,7 @@ const uuid = require('uuid');
 const router = express.Router();
 const colors = require('colors');
 
-router.get('/signin', async(request, response) => {
+router.post('/signin', async(request, response) => {
     connection = getConnection();
     connection.connect(error => {
         if (error) {
@@ -21,16 +21,27 @@ router.get('/signin', async(request, response) => {
     const values = [email];
     connection.query(sql, values, (error, result) => {
         if (error) response.status(200).json({ error: true, status: 500, message: error.message });
-        if (result.length > 0) {
+        if (result[0].length > 0) {
             let hashkey = result[0]['0'].cust_akey;
             let comparePass = bcryptjs.compareSync(password, hashkey);
             if (comparePass) {
-                response.status(200).json({ error: false, status: 200, message: "success" });
+                response.status(200).json({
+                    error: false,
+                    status: 200,
+                    result: {
+                        id: result[0]['0'].id,
+                        name: result[0]['0'].name,
+                        username: result[0]['0'].username,
+                        email: result[0]['0'].email,
+                        birthday: result[0]['0'].birthday,
+                        biography: result[0]['0'].biography
+                    }
+                });
             } else {
-                response.status(200).json({ error: false, status: 200, message: "denied" });
+                response.status(200).json({ error: true, status: 200, result: '' });
             }
         } else {
-            response.status(200).json({ error: true, status: 500, message: 'No result' });
+            response.status(200).json({ error: true, status: 500, result: '' });
         }
     });
     connection.end();

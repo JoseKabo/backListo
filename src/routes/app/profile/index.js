@@ -19,13 +19,13 @@ router.post('/changeInfo', async(request, response) => {
         birthday,
         biography
     } = request.body;
-    const sql = ` CALL SP_alterUser(?, ?, ?, ?, @result) `;
+    const sql = ` CALL SP_alterUser(?, ?, ?, ?) `;
     const values = [
         id, email, birthday, biography
     ];
     connection.query(sql, values, (error, result) => {
         if (error) response.status(200).json({ error: true, status: 500, message: error.message });
-        if (result.affectedRows > 0) {
+        if (result.length > 0) {
             response.status(200).json({
                 error: false,
                 status: 200,
