@@ -1,7 +1,7 @@
 const express = require('express');
 const getConnection = require('../../../config/database');
 const bcryptjs = require('bcryptjs');
-const uuid = require('uuid');
+const { v4: uuidv4 } = require('uuid');
 const router = express.Router();
 const colors = require('colors');
 
@@ -59,17 +59,15 @@ router.post('/signup', async(request, response) => {
         name,
         username,
         email,
-        birthday,
-        biography
+        birthday
     } = request.body;
     const password = request.body.password;
     let cust_akey = await bcryptjs.hash(password, 8);
-    let id = uuid.v5;
-
-    const sql = ` CALL SP_SignUp(?, ?, ? ,?, ?, ?, ?, @result) `;
+    let id = uuidv4();
+    const sql = ` CALL SP_SignUp(?, ?, ? ,?, ?, ?, @result) `;
 
     const values = [
-        id.DNS, name, username, email, cust_akey, birthday, biography
+        id, name, username, email, cust_akey, birthday
     ];
     connection.query(sql, values, (error, result) => {
         if (error) response.status(200).json({ error: true, status: 500, message: error.message });
@@ -77,13 +75,10 @@ router.post('/signup', async(request, response) => {
             response.status(200).json({
                 error: false,
                 status: 200,
-                message: {
-                    response: result[0],
-                    message: "Success"
-                }
+                message: "success"
             });
         } else {
-            response.status(200).json({ error: true, status: 500, message: 'No result' });
+            response.status(200).json({ error: true, status: 400, message: 'No result' });
         }
     });
     connection.end();
