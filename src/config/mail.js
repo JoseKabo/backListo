@@ -1,11 +1,11 @@
 const nodeMailer = require("nodemailer");
 
 const transporter = nodeMailer.createTransport({
-    host: "smtp.hostinger.mx",
+    host: process.env.HOST_SMTP,
     port: 587,
     auth: {
-        user: "cdental.support@tecdevsmx.com",
-        pass: ">fmd;s&9lO",
+        user: process.env.USER_SMTP,
+        pass: process.env.PASS_SMTP,
     }
 });
 

@@ -1,6 +1,7 @@
 require('./src/config/server');
 require('./src/config/database');
 require('colors');
+require('dotenv').config();
 
 const express = require('express');
 const bodyParser = require('body-parser');
