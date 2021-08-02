@@ -71,14 +71,14 @@ router.post('/signup', async(request, response) => {
     ];
     connection.query(sql, values, (error, result) => {
         if (error) response.status(200).json({ error: true, status: 500, message: error.message });
-        if (result.affectedRows > 0) {
+        if (result[1].affectedRows > 0) {
             response.status(200).json({
                 error: false,
                 status: 200,
-                message: "success"
+                message: result[0][0].result
             });
         } else {
-            response.status(200).json({ error: true, status: 400, message: 'No result' });
+            response.status(200).json({ error: true, status: 400, message: result[0][0].result });
         }
     });
     connection.end();
