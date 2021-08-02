@@ -48,6 +48,7 @@ router.post('/changePass', async(request, response) => {
             console.log(error);
             response.status(200).json({ error: true, status: 500, message: "ERROR_SERVER" });
         }
+
     });
     const {
         id,
